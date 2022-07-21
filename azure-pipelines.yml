@@ -5,30 +5,31 @@
 
 trigger:
 - main
+- releases/*
 
 strategy:
   matrix:
-    linux: 
-      imageName: "ubuntu-latest"
-    mac:
-      imageName: "macOS-latest"
-    windows:
-      imageName: "windows-latest"
+    jdk8: 
+      jdkVersion: "1.8"
+    jdk11:
+      jdkVersion: "1.11"
+    jdk17:
+      jdkVersion: "1.17"
   
 pool:
-  vmImage: $(imageName)
+  vmImage: "linux-latest"
 
 steps:
 - task: Maven@3
   inputs:
-    mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.8'
-    jdkArchitectureOption: 'x64'
+    mavenPomFile: "pom.xml"
+    mavenOptions: "-Xmx3072m"
+    javaHomeOption: "JDKVersion"
+    jdkVersionOption: "$(jdkVersion)"
+    jdkArchitectureOption: "x64"
     publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
+    testResultsFiles: "**/surefire-reports/TEST-*.xml"
+    goals: "package"
 
 # - task: PublishCodeCoverageResults@1
 #   inputs:
